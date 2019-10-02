@@ -138,7 +138,7 @@ To activate `postfix-tempmail` in `postfix` append it to the `virtual_alias_maps
 [/etc/postfix/main.cf](/code/a588a7c1d8a863e45883dc1637ddbc0c39189512bc8bb1f435c38cbe4e84a656 "Download Snippet")
 
 ```
-virtual\_alias\_maps = ... socketmap:unix:/postfix-tempmail/socket:tempmail
+virtual_alias_maps = ... socketmap:unix:/postfix-tempmail/socket:tempmail
 ```
 
 Reload `postfix`, and try to send an e-mail to your temporary address.
