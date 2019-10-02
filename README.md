@@ -21,8 +21,10 @@ The idea is to generate an e-mail address from a date and a secret. Everyone who
 
 Here is an example PHP code
 
+```
 $secret = "<Your secret>";
 echo substr(md5(date("Ymd").$secret),0,8).'@example.com';
+```
 
 This will print a different e-mail address like `35de1bff@example.com` for every day.
 
@@ -37,6 +39,7 @@ Installation
 
 `postfix-tempmail` is hosted on [GitHub](https://github.com/68b32/postfix-tempmail "https://github.com/68b32/postfix-tempmail") and can be installed with the following instructions:
 
+```
 root@mailhost:~# apt-get install git socat
 root@mailhost:~# git clone https://github.com/68b32/postfix-tempmail.git
 
@@ -46,6 +49,7 @@ root@mailhost:~# install -o postfix -g root -m 0750 -d /var/spool/postfix/postfi
 root@mailhost:~# install -o root -g root -m 0644 postfix-tempmail/postfix-tempmail.service /etc/systemd/system
 
 root@mailhost:~# systemctl daemon-reload
+```
 
 Configuration
 -------------
@@ -104,12 +108,15 @@ Test configuration
 
 To test the configuration, first run `postfix-tempmail` without arguments to list the current addresses.
 
+```
 root@mailhost:~# postfix-tempmail
 8d4f005d@example.com
 12b97900@example.com
+```
 
 Now start the listener and query for the addresses using the `postmap` command.
 
+```
 root@mailhost:~# systemctl start postfix-tempmail
 
 root@mailhost:~# postmap -q 8d4f005d@example.com socketmap:unix:/var/spool/postfix/postfix-tempmail/socket:tempmail
@@ -119,6 +126,7 @@ root@mailhost:~# postmap -q 12b97900@example.com socketmap:unix:/var/spool/postf
 permanent-address@example.com
 
 root@mailhost:~# postmap -q invalid@example.com socketmap:unix:/var/spool/postfix/postfix-tempmail/socket:tempmail
+```
 
 If this does not work, check `systemctl status postfix-tempmail -l` for errors.
 
@@ -129,13 +137,19 @@ To activate `postfix-tempmail` in `postfix` append it to the `virtual_alias_maps
 
 [/etc/postfix/main.cf](/code/a588a7c1d8a863e45883dc1637ddbc0c39189512bc8bb1f435c38cbe4e84a656 "Download Snippet")
 
+```
 virtual\_alias\_maps = ... socketmap:unix:/postfix-tempmail/socket:tempmail
+```
 
 Reload `postfix`, and try to send an e-mail to your temporary address.
 
+```
 root@mailhost:~# systemctl reload postfix
+```
 
 Enable `postfix-tempmail` to start on boot just before `postfix`.
 
+```
 root@mailhost:~# systemctl enable postfix-tempmail
 Created symlink from /etc/systemd/system/postfix.service.wants/postfix-tempmail.service to /etc/systemd/system/postfix-tempmail.service.
+```
