@@ -6,7 +6,7 @@ CONF="/etc/postfix/tempmail.cf"
 # List valid email addresses
 listMails() {
 	for day in yesterday now; do
-		echo "`(date +%Y%m%d -d \"${day}\" | tr -d '\n'; echo -n \"${SHARED_SECRET}\";) | md5sum | cut -c1-${LENGTH}`@${DOMAIN}"
+		echo "dated-`(date +%Y%m%d -d \"${day}\" | tr -d '\n'; echo -n \"${SHARED_SECRET}\";) | md5sum | cut -c1-${LENGTH}`@${DOMAIN}"
 	done
 }
 
