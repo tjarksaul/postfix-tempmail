@@ -10,6 +10,11 @@ listMails() {
 	done
 }
 
+# Get only current email address 
+getCurrent() {
+	echo "dated-`(date +%Y%m%d -d \"now" | tr -d '\n'; echo -n \"${SHARED_SECRET}\";) | md5sum | cut -c1-${LENGTH}`@${DOMAIN}"
+}
+
 # Output to stderr if -v flag is set
 # $1: Message
 verbose() {
@@ -86,6 +91,7 @@ while [ $# -gt 0 ]; do
 		-v) _VERBOSE="-v";;
 		-l) _LISTEN=true;;
 		-p) _PARSE=true;;
+		-c) _CURRENT=true;;
 		-h) _HELP=true;;
 		 *) _HELP=true;;
 	esac
@@ -136,6 +142,13 @@ if [ -n "$_PARSE" ]; then
 	done
 	exit
 fi
+
+# Called with -c 
+if [ -n "$_CURRENT" ]; then
+	getCurrent
+	exit
+fi                                                                                                          
+
 
 # Called without arguments
 listMails
